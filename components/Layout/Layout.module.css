@@ -1,0 +1,41 @@
+.grid {
+    display: grid;
+    grid-template-columns: auto auto 20%;
+    grid-template-rows: auto auto auto;
+    grid-template-areas: 
+      "navbar navbar navbar"
+      "searchbar searchbar searchbar"
+      "left result history";
+    /* gap: 2rem; */
+  }
+  
+  .nav {
+    grid-area: navbar;
+    background-color: rgb(var(--bg-colour-5));
+    color: rgb(var(--bg-colour-2));
+    box-shadow: 0px 0px 0.5rem black;
+  }
+  
+  .searchbar {
+    grid-area: searchbar;
+    background-color: rgb(var(--bg-colour-2));
+    margin-top: var(--margin-separator-top);
+  }
+  
+  .result {
+    grid-area: result;
+    margin-top: var(--margin-separator-top);
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .history {
+    grid-area: history;
+    margin-top: var(--margin-separator-top);
+    justify-self: flex-end;
+  }
+  
+  .footer {
+    grid-area: footer;
+  }

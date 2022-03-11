@@ -1,13 +1,10 @@
 import '../styles/globals.css'
-import Layout from '../components/Layout'
-import {apiserver} from '../config'
+import Layout from '../components/Layout/Layout.js'
 
 
 function MyApp({ Component, pageProps }) {
   return (
-    <Layout>
-      {/* <Component {...pageProps} /> */}
-    </Layout>
+    <Layout />
   )
 }
 

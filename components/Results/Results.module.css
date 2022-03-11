@@ -1,0 +1,116 @@
+/* .resultsContainer {
+    margin-top: var(--margin-separator-top);
+    position: relative;
+    width: 35rem;
+} */
+
+.container {
+    /* colour */
+    background-color: rgb(var(--bg-colour-1));
+    outline: 1px solid rgba(var(--bg-colour-5), 0.3);
+
+    /* size and shape */
+    width: clamp(25rem, 35rem, 50rem);
+    border-radius: 3px;
+
+    /* position */
+    margin-top: var(--margin-separator-top);
+    padding-bottom: 0.5rem;
+    position: relative;
+
+    /* children: flex */
+    display: flex;
+    flex-direction: column;
+
+}
+
+.container p {
+    /* colour */
+    color: rgb(var(--bg-colour-1));
+    background: linear-gradient(
+        to bottom right,
+        rgb(var(--bg-colour-2)),
+        rgb(var(--bg-colour-4))
+    );
+    background-color: rgb(var(--bg-colour-2));
+    box-shadow: 0px 3px 8px 2px rgba(var(--bg-colour-5), 0.7);
+
+    /* positioning */
+    align-self: center;
+    position: relative;
+    width: calc(100% - 2vw);
+    top: -1rem;
+    margin-top: 0px;
+    margin-bottom: 0px;
+
+    /* size */
+    height: 3rem;
+
+    /* shape */
+    border-radius: 3px;
+
+    /* text */
+    text-align: center;
+    line-height: 3rem;
+    font-size: large;
+
+    /* behaviour */
+    cursor: default;
+}
+
+.container ul {
+    /* remove ugly dot points */
+    list-style: none;
+
+    /* position */
+    margin-top: 0px;
+    margin-bottom: 0rem;
+    padding-left: 0px;
+
+    /* children: flex */
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+
+    cursor: pointer;
+}
+
+.container ul:hover {
+    position: relative;
+    box-shadow: 0px 0px 20px 1px rgba(0, 0, 0, 0.5);
+}
+
+.container li {
+    /* vertically center content in rows */
+    display: flex;
+    align-items: center;
+}
+
+.container svg {
+    /* size */
+    height: 2.5rem;
+    width: 2.5rem;
+
+    /* position */
+    box-sizing: content-box;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+}
+
+.protocol {
+    width: 3rem;
+    box-shadow: 10px 0px 5px -10px rgba(var(--bg-colour-5), 1);
+}
+
+.message {
+    /* align-self: center; */
+}
+
+.hostIsUp {
+    background-color: rgb(var(--bg-colour-success));
+}
+
+.hostIsDown {
+    background-color: rgb(var(--bg-colour-error));
+    color: rgb(var(--bg-colour-1));
+    fill: rgb(var(--bg-colour-1));
+}

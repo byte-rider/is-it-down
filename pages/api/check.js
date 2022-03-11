@@ -37,6 +37,20 @@ const performPortScan = (portsArray, host) => {
     })
 }
 
+const performPing = (host) => {
+    return new Promise(resolve => {
+        ping.promise.probe(host).then(results => {
+            if (results.alive === true) {
+                resolve({hostIsUp: true, ...results})
+            }
+            
+            if (results.alive === false) {
+                resolve({hostIsUp: false, ...results})
+            }
+        })
+    })
+}
+
 export default async function handler(req, res) {
     
     if (req.method === 'POST') {
@@ -54,7 +68,7 @@ export default async function handler(req, res) {
                 break;
                 
             case 'ping':
-                lookupResult = await ping.promise.probe(req.body.url).then(v => {return {protocol: "ping", ...v}});
+                lookupResult = await performPing(req.body.url).then(v => {return {protocol: "ping", ...v}});
                 resultsArray = [lookupResult];
                 break;
                 
@@ -66,7 +80,7 @@ export default async function handler(req, res) {
             case 'ALL':
                 const a = performHTTPLookup(http, `http://${req.body.url}`).then(v => {return {protocol: "http", ...v}});
                 const b = performHTTPLookup(https, `https://${req.body.url}`).then(v => {return {protocol: "https", ...v}});
-                const c = ping.promise.probe(req.body.url).then(v => {return {protocol: "ping", ...v}});
+                const c = performPing(req.body.url).then(v => {return {protocol: "ping", ...v}});
                 const d = performPortScan([5900, 5901, 5902, 5903, 5904, 5905], req.body.url).then(v => {return {protocol: "vnc", ...v}});
                 resultsArray = await Promise.all([a, b, c, d]);
                 break;

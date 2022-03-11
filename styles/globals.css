@@ -1,9 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;1,800&display=swap');
+
+:root {
+  --bg-colour-1: 228, 233, 238;
+  --bg-colour-2: 112, 132, 156;
+  --bg-colour-3: 103, 118, 157;
+  --bg-colour-4: 83, 89, 121;
+  --bg-colour-5: 30, 30, 44;
+  --bg-colour-error: 106, 55, 57;
+  --bg-colour-success: 132, 197, 130;
+
+  --margin-separator-top: 1.5rem;
+}
+
 html,
 body {
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  
+    font-family: 'Open Sans', sans-serif;
+    font-size: medium;
+    
+    background-color: rgb(var(--bg-colour-2));
 }
 
 a {
@@ -13,9 +32,4 @@ a {
 
 * {
   box-sizing: border-box;
-}
-
-.outline {
-  border: solid 2px black;
-  /* margin: 2px; */
 }
