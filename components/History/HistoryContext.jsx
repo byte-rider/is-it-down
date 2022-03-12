@@ -1,4 +1,3 @@
-import { filterProps } from "framer-motion";
 import {useState, useEffect, createContext} from "react";
 
 const HistoryContext = createContext();

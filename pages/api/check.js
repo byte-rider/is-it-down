@@ -10,11 +10,33 @@ const portscanner = require('portscanner')
 const performHTTPLookup = (httpModule, url) => {
     return new Promise(resolve => {
         const handleSuccess = (v) => {
-            resolve({hostIsUp: true, httpStatusCode: v.statusCode, httpStatusMessage: v.statusMessage});
+            const i = v.rawHeaders.indexOf('Location') + 1;
+            let newLocation = (i)? v.rawHeaders[i] : "";
+            console.log(v.rawHeaders);
+            resolve({
+                hostIsUp: true, 
+                extraInfo: {
+                    protocol : v.socket._httpMessage.protocol,
+                    host: v.socket._httpMessage.host,
+                    path : v.socket._httpMessage.path,
+                    httpStatusCode: v.statusCode,
+                    httpStatusMessage: v.statusMessage,
+                    newLocation: newLocation,
+                    httpHeader: v.socket._httpMessage._header,
+                    defaultEncoding: v._readableState.defaultEncoding,
+                    rawHeaders: v.rawHeaders,
+                }});
         }
 
         const handleError = (e) => {
-            resolve({hostIsUp: false, httpStatusCode: "none", httpStatusMessage: e.code});
+            resolve({
+                hostIsUp: false,
+                extraInfo: {
+                    failedAt: e.syscall,
+                    reason: e.code,
+                    errno: e.errno,
+                    hostname: e.address,
+                }});
         }
         try {
             httpModule
@@ -30,9 +52,10 @@ const performPortScan = (portsArray, host) => {
     return new Promise(resolve => {
         portscanner.findAPortInUse(portsArray, host, function(error, port) {
             if (!!port) {
-                resolve({hostIsUp: true, vncPortOpen: port})
+                resolve({hostIsUp: true, extraInfo: {portOpen: port}})
+            } else {
+                resolve({hostIsUp: false, extraInfo: {portOpen: "none"}})
             }
-            resolve({hostIsUp: false, vncPortOpen: "none"})
         })
     })
 }
@@ -41,11 +64,11 @@ const performPing = (host) => {
     return new Promise(resolve => {
         ping.promise.probe(host).then(results => {
             if (results.alive === true) {
-                resolve({hostIsUp: true, ...results})
+                resolve({hostIsUp: true, extraInfo: {...results}})
             }
             
             if (results.alive === false) {
-                resolve({hostIsUp: false, ...results})
+                resolve({hostIsUp: false, extraInfo: {...results}})
             }
         })
     })
@@ -76,17 +99,17 @@ export default async function handler(req, res) {
                 lookupResult = await performPortScan([5900, 5901, 5902, 5903, 5904, 5905], req.body.url).then(v => {return {protocol: "vnc", ...v}});
                 resultsArray = [lookupResult];
                 break;
-                
-            case 'ALL':
-                const a = performHTTPLookup(http, `http://${req.body.url}`).then(v => {return {protocol: "http", ...v}});
-                const b = performHTTPLookup(https, `https://${req.body.url}`).then(v => {return {protocol: "https", ...v}});
-                const c = performPing(req.body.url).then(v => {return {protocol: "ping", ...v}});
-                const d = performPortScan([5900, 5901, 5902, 5903, 5904, 5905], req.body.url).then(v => {return {protocol: "vnc", ...v}});
-                resultsArray = await Promise.all([a, b, c, d]);
+            
+            case 'ssh':
+                lookupResult = await performPortScan([22], req.body.url).then(v => {return {protocol: "ssh", ...v}});
+                resultsArray = [lookupResult];
+                break;
+            case 'rdp':
+                lookupResult = await performPortScan([3389], req.body.url).then(v => {return {protocol: "rdp", ...v}});
+                resultsArray = [lookupResult];
                 break;
         }
 
-        // res.status(200);
         res.status(200).json(resultsArray);
     }
 }

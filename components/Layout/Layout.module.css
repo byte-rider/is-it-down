@@ -1,41 +1,54 @@
 .grid {
     display: grid;
-    grid-template-columns: auto auto 20%;
+    grid-template-columns: auto 1fr auto;
     grid-template-rows: auto auto auto;
     grid-template-areas: 
       "navbar navbar navbar"
-      "searchbar searchbar searchbar"
+      "left searchbar right"
       "left result history";
-    /* gap: 2rem; */
+    column-gap: 0.5rem;
+  }
+
+  .grid .title {
+    grid-column: 2/2;
+    grid-row: 1/1;
+    cursor: default;
+    align-self: center;
+    justify-self: center;
+    z-index: 1;
   }
   
-  .nav {
+  .grid .title, .grid .nav {
+    font-size: x-large;
+    font-weight: lighter;
+    color: rgba(var(--nav-text-colour), 0.8);
+  }
+  
+  .grid .nav {
     grid-area: navbar;
-    background-color: rgb(var(--bg-colour-5));
-    color: rgb(var(--bg-colour-2));
-    box-shadow: 0px 0px 0.5rem black;
+    background-color: rgb(var(--nav-background-colour));
+    box-shadow: var(--nav-boxshadow);
   }
   
-  .searchbar {
+  .grid .searchbar {
     grid-area: searchbar;
-    background-color: rgb(var(--bg-colour-2));
+    background-color: rgb(var(--search-background-colour));
     margin-top: var(--margin-separator-top);
   }
   
-  .result {
+  .grid .result {
     grid-area: result;
+    justify-self: center;
     margin-top: var(--margin-separator-top);
-    height: fit-content;
-    display: flex;
-    justify-content: center;
+    /* height: fit-content; */
+
+    /* display: flex; */
+    /* justify-content: flex-end; */
+
   }
   
-  .history {
+  .grid .history {
     grid-area: history;
     margin-top: var(--margin-separator-top);
     justify-self: flex-end;
-  }
-  
-  .footer {
-    grid-area: footer;
   }
