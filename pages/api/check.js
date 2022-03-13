@@ -6,6 +6,7 @@ const http = require('http');
 const https = require('https');
 const ping = require('ping');
 const portscanner = require('portscanner')
+const { exec } = require("child_process");
 
 const performHTTPLookup = (httpModule, url) => {
     const TIMEOUT = 7000;
@@ -82,14 +83,31 @@ const performPing = (host) => {
     })
 }
 
+const getFQDN = function(host) {
+    return new Promise(resolve => {
+        exec(`nslookup ${host} | grep Name | head -n 1 | awk '{print $2}'`, (error, stdout, stderr) => {
+            if (error) {
+                resolve(error)
+            }
+            if (stderr) {
+                resolve(stderr);
+            }
+            resolve(stdout);
+        });
+
+    })
+}
+
 export default async function handler(req, res) {
     
     if (req.method === 'POST') {
         let lookupResult = {};
         let resultsArray = [];
+        const fqdnLookup = await getFQDN(req.body.url).then(v => {return v.toString()});
+        const fqdn = {fullyQualifiedName: fqdnLookup}
         switch (req.body.protocol) {
             case 'http':
-                lookupResult =  await performHTTPLookup(http, `http://${req.body.url}`).then(v => {return {protocol: "http", ...v}});
+                lookupResult =  await performHTTPLookup(http, `http://${req.body.url}`).then(v => {return {protocol: "http", ...fqdn, ...v}});
                 resultsArray = [lookupResult];
                 break;
                 
@@ -118,6 +136,7 @@ export default async function handler(req, res) {
                 break;
         }
 
+        resultsArray[0].extraInfo = {...fqdn, ...resultsArray[0].extraInfo}
         res.status(200).json(resultsArray);
     }
 }
