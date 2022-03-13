@@ -26,7 +26,6 @@ const SearchBar = () => {
         searchBarContext.inputHostReference.current.value = ""; // empty input field as courtesy
         searchBarContext.inputHostReference.current.blur();
 
-
         // update state
         historyContext._addToHistory(inputHost);
         resultsContext.setAddress(() => inputHost);
