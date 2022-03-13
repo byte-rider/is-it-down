@@ -12,7 +12,6 @@ const performHTTPLookup = (httpModule, url) => {
         const handleSuccess = (v) => {
             const i = v.rawHeaders.indexOf('Location') + 1;
             let newLocation = (i)? v.rawHeaders[i] : "";
-            console.log(v.rawHeaders);
             resolve({
                 hostIsUp: true, 
                 extraInfo: {
