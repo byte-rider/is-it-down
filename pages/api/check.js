@@ -8,6 +8,7 @@ const ping = require('ping');
 const portscanner = require('portscanner')
 
 const performHTTPLookup = (httpModule, url) => {
+    const TIMEOUT = 7000;
     return new Promise(resolve => {
         const handleSuccess = (v) => {
             const i = v.rawHeaders.indexOf('Location') + 1;
@@ -28,6 +29,11 @@ const performHTTPLookup = (httpModule, url) => {
         }
 
         const handleError = (e) => {
+            if (e.code === "ECONNRESET") {
+                // timeout was reached
+                e.socket = "socket hang up";
+                e.note = "timeout reached";
+            }
             resolve({
                 hostIsUp: false,
                 extraInfo: {
@@ -35,12 +41,15 @@ const performHTTPLookup = (httpModule, url) => {
                     reason: e.code,
                     errno: e.errno,
                     hostname: e.address,
+                    socket: e.socket,
+                    note: e.note,
                 }});
         }
         try {
-            httpModule
-            .get(url,  v => handleSuccess(v))
-            .on('error', e => handleError(e))
+            const request = httpModule.get(url, {timeout: TIMEOUT});
+            request.on('response', response => handleSuccess(response));
+            request.on('timeout', () => request.abort())
+            request.on('error', e => handleError(e))
         } catch (e) {
             handleError(e);
         }
