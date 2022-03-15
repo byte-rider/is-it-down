@@ -59,7 +59,7 @@
   /* --margin-separator-top: 2.5rem; */
   --margin-separator-top: 4vh;
 
-  font-size: normal;
+  /* font-size: normal; */
 }
 
 html,
@@ -68,7 +68,7 @@ body {
   margin: 0;
   overflow-x: hidden;
   font-family: 'Open Sans', sans-serif;
-  font-size: medium;
+  /* font-size: medium; */
   background-color: rgb(var(--major-background-colour));
 }
 

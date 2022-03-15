@@ -12,7 +12,7 @@ const performHTTPLookup = (httpModule, url) => {
     const TIMEOUT = 7000;
     return new Promise(resolve => {
         const handleSuccess = (v) => {
-            const i = v.rawHeaders.indexOf('Location') + 1;
+            const i = v.rawHeaders.indexOf('Location') + 1; // Yuck. What were you thinking, Geogie boy? Change this hack to check for 301 status /then/ report the new location.
             let newLocation = (i)? v.rawHeaders[i] : "";
             resolve({
                 hostIsUp: true, 
@@ -103,35 +103,36 @@ export default async function handler(req, res) {
     if (req.method === 'POST') {
         let lookupResult = {};
         let resultsArray = [];
-        const fqdnLookup = await getFQDN(req.body.url).then(v => {return v.toString()});
+        let sanitisedInput = req.body.url.replace(/[^A-Za-z0-9\.:%]/g, "").replace(/https?:\/\//, "");
+        const fqdnLookup = await getFQDN(sanitisedInput).then(v => {return v.toString()});
         const fqdn = {fullyQualifiedName: fqdnLookup}
         switch (req.body.protocol) {
             case 'http':
-                lookupResult =  await performHTTPLookup(http, `http://${req.body.url}`).then(v => {return {protocol: "http", ...fqdn, ...v}});
+                lookupResult =  await performHTTPLookup(http, `http://${sanitisedInput}`).then(v => {return {protocol: "http", ...fqdn, ...v}});
                 resultsArray = [lookupResult];
                 break;
                 
             case 'https':
-                lookupResult = await performHTTPLookup(https, `https://${req.body.url}`).then(v => {return {protocol: "https", ...v}});
+                lookupResult = await performHTTPLookup(https, `https://${sanitisedInput}`).then(v => {return {protocol: "https", ...v}});
                 resultsArray = [lookupResult];
                 break;
                 
             case 'ping':
-                lookupResult = await performPing(req.body.url).then(v => {return {protocol: "ping", ...v}});
+                lookupResult = await performPing(sanitisedInput).then(v => {return {protocol: "ping", ...v}});
                 resultsArray = [lookupResult];
                 break;
                 
             case 'vnc':
-                lookupResult = await performPortScan([5900, 5901, 5902, 5903, 5904, 5905], req.body.url).then(v => {return {protocol: "vnc", ...v}});
+                lookupResult = await performPortScan([5900, 5901, 5902, 5903, 5904, 5905], sanitisedInput).then(v => {return {protocol: "vnc", ...v}});
                 resultsArray = [lookupResult];
                 break;
             
             case 'ssh':
-                lookupResult = await performPortScan([22], req.body.url).then(v => {return {protocol: "ssh", ...v}});
+                lookupResult = await performPortScan([22], sanitisedInput).then(v => {return {protocol: "ssh", ...v}});
                 resultsArray = [lookupResult];
                 break;
             case 'rdp':
-                lookupResult = await performPortScan([3389], req.body.url).then(v => {return {protocol: "rdp", ...v}});
+                lookupResult = await performPortScan([3389], sanitisedInput).then(v => {return {protocol: "rdp", ...v}});
                 resultsArray = [lookupResult];
                 break;
         }
