@@ -9,6 +9,7 @@ const Nav = () => {
     return (
         <div className={styles.container}>
             <CSIROSVG />
+            <p className={styles.title}>IS IT DOWN?</p>
             <div onClick={() => modalContext.modalOpen()}>ABOUT</div>
         </div>
     )

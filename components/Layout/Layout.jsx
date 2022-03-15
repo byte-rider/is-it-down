@@ -20,7 +20,6 @@ const Layout = () => {
                 <SearchBarProvider>
                     <div className={styles.grid}>
                         {aboutModalContext.modalIsOpen && <AboutModal />}
-                        <p className={styles.title}>IS IT DOWN?</p>
                         <nav className={styles.nav}><Nav /></nav>
                         <section className={styles.searchbar}><SearchBar /></section>
                         <section className={styles.result}><Results /></section>

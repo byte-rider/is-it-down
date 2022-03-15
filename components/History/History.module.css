@@ -6,16 +6,34 @@
     /* shape */
     border-radius: 3px;
     min-width: 9rem;
+    max-width: 22rem;
 
     /* position */
     margin-top: 1rem;
-    /* margin-left: 1rem; */
+    position: absolute;
+    right: 0px;
 
     /* children: flex */
     display: flex;
     flex-direction: column;
     align-items: flex-end;
 }
+
+
+/* making sure we don't touch the results section */
+@media (max-width: 93rem) and (min-width: 53rem) {
+    .container {
+        position: relative;
+        max-width: 25vw;
+    }
+}
+
+@media (max-width: 53rem) {
+    .container {
+        visibility: hidden;
+    }
+}
+
 
 .container p {
     /* colour */
@@ -62,7 +80,13 @@
     gap: 1rem;
 }
 
-/* text "clear" next to rubbish bin */
+.container .domainName {
+    /* behaviour */
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+/* string next to rubbish bin, i.e., "clear" */
 .container ul:last-child li:first-child {
     cursor: default;
 }
