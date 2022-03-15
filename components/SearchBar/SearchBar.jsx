@@ -23,7 +23,7 @@ const SearchBar = () => {
         const inputProtocol = searchBarContext.inputProtocolReference.current.value; 
         resultsContext._clearResults(); // clear previous output
         inputHost = inputHost.replace(/https?:\/\//, ""); // strip input of any protocol
-        inputHost = inputHost.replace(/[^A-Za-z0-9\.:%]/g, ""); // sanitise
+        inputHost = inputHost.replace(/[^A-Za-z0-9\.:%-]/g, ""); // sanitise
         searchBarContext.inputHostReference.current.value = ""; // empty input field as courtesy
         searchBarContext.inputHostReference.current.blur();
 

@@ -103,7 +103,7 @@ export default async function handler(req, res) {
     if (req.method === 'POST') {
         let lookupResult = {};
         let resultsArray = [];
-        let sanitisedInput = req.body.url.replace(/[^A-Za-z0-9\.:%]/g, "").replace(/https?:\/\//, "");
+        let sanitisedInput = req.body.url.replace(/[^A-Za-z0-9\.:%-]/g, "").replace(/https?:\/\//, "");
         const fqdnLookup = await getFQDN(sanitisedInput).then(v => {return v.toString()});
         const fqdn = {fullyQualifiedName: fqdnLookup}
         switch (req.body.protocol) {
