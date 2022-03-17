@@ -1,12 +1,17 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-
-import { resolve } from 'path';
+import {serverLogFile} from '../../config/ApiServerAddress';
 
 const http = require('http');
 const https = require('https');
 const ping = require('ping');
 const portscanner = require('portscanner')
 const { exec } = require("child_process");
+
+const fs = require('fs'); // file system : used for writing to the log
+
+
+console.log(serverLogFile);
+
 
 const performHTTPLookup = (httpModule, url) => {
     const TIMEOUT = 7000;
@@ -98,12 +103,28 @@ const getFQDN = function(host) {
     })
 }
 
+const writeToLog = function(host) {
+    let log = JSON.parse(fs.readFileSync(serverLogFile));
+    try {
+        if (!log.hasOwnProperty(host)) {
+            log[host] = {count: 0};
+        }
+
+        log[host].count += 1;
+
+        fs.writeFileSync(serverLogFile, JSON.stringify(log, null, 2));
+    } catch (error) {
+        console.error(`failed to write to log: ${error}`);
+        return;
+    }
+}
+
 export default async function handler(req, res) {
-    
     if (req.method === 'POST') {
         let lookupResult = {};
         let resultsArray = [];
         let sanitisedInput = req.body.url.replace(/[^A-Za-z0-9\.:%-]/g, "").replace(/https?:\/\//, "");
+        writeToLog(sanitisedInput);
         const fqdnLookup = await getFQDN(sanitisedInput).then(v => {return v.toString()});
         const fqdn = {fullyQualifiedName: fqdnLookup}
         switch (req.body.protocol) {
