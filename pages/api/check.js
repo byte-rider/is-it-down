@@ -103,14 +103,18 @@ const getFQDN = function(host) {
     })
 }
 
-const writeToLog = function(host) {
+const writeToLog = function(host, request) {
     let log = JSON.parse(fs.readFileSync(serverLogFile));
     try {
         if (!log.hasOwnProperty(host)) {
-            log[host] = {count: 0};
+            log[host] = {};
+        }
+        
+        if (!log[host].hasOwnProperty(request.body.protocol)) {
+            log[host][request.body.protocol] = 0;
         }
 
-        log[host].count += 1;
+        log[host][request.body.protocol] += 1;
 
         fs.writeFileSync(serverLogFile, JSON.stringify(log, null, 2));
     } catch (error) {
@@ -124,7 +128,7 @@ export default async function handler(req, res) {
         let lookupResult = {};
         let resultsArray = [];
         let sanitisedInput = req.body.url.replace(/[^A-Za-z0-9\.:%-]/g, "").replace(/https?:\/\//, "");
-        writeToLog(sanitisedInput);
+        writeToLog(sanitisedInput, req);
         const fqdnLookup = await getFQDN(sanitisedInput).then(v => {return v.toString()});
         const fqdn = {fullyQualifiedName: fqdnLookup}
         switch (req.body.protocol) {
