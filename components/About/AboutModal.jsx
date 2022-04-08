@@ -37,8 +37,8 @@ const AboutModal = () => {
                 <p>
                     Note: The server will attempt to DNS resolve your input <br />
                     on following domians: [csiro.au, it.csiro.au, nexus.csiro.au] <br />
-                    so there's no need to enter the FQDN for a workstation, such as <br />
-                    'samsara-nc.nexus.csiro.au'. You only need to enter 'samsara-nc'
+                    so there&apos;s no need to enter the FQDN for a workstation, such as <br />
+                    &apos;samsara-nc.nexus.csiro.au&apos;. You only need to enter &apos;samsara-nc&apos;
                 </p>
 
                 <p>Suggestions, bugs or comments go to <a href="mailto:george.edwards@csiro.au">edw19b@csiro.au</a></p>
