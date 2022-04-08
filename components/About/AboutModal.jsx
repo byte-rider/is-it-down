@@ -26,7 +26,7 @@ const AboutModal = () => {
     return(
         <motion.div className={styles.backdrop} onClick={(e) => modalContext.modalClose()} {...animationModal}>
             <motion.div onClick={(e) => e.stopPropagation()} className={styles.modal} {...animationContent}>
-                <h1>Is It Down?</h1>
+                <h1>Is It Down? (beta)</h1>
                 <p>
                     Checks if a resource is down for everyone or just you.
                 </p>
@@ -37,8 +37,6 @@ const AboutModal = () => {
                 <p>
                     Note: The server will attempt to DNS resolve your input <br />
                     on following domians: [csiro.au, it.csiro.au, nexus.csiro.au] <br />
-                    so there&apos;s no need to enter the FQDN for a workstation, such as <br />
-                    &apos;samsara-nc.nexus.csiro.au&apos;. You only need to enter &apos;samsara-nc&apos;
                 </p>
 
                 <p>Suggestions, bugs or comments go to <a href="mailto:george.edwards@csiro.au">edw19b@csiro.au</a></p>
