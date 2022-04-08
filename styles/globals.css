@@ -1,16 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;1,800&display=swap');
 
 :root {
-  /* original */
-  /* --colour-white: 228, 233, 238;
-  --colour-light: 112, 132, 156;
-  --colour-lightdark: 83, 89, 121;
-  --colour-dark: 30, 30, 44;
-  --colour-good: 132, 197, 130;
-  --colour-bad: 106, 55, 57; */
-
-  /* csiro colours */
-  /* --colour-white: 239, 234, 237; */
+  /* colour theme */
   --colour-white: 204, 204, 202;
   --colour-light: 61, 138, 185;
   --colour-lightdark: 46, 101, 135;
@@ -19,8 +10,8 @@
   --colour-bad: 183, 81, 95;
   --colour-black: 0, 0, 0;
 
-  /* vars used in actual stylesheets */
-  
+  /* change app colours from here */
+  /**/
   /* nav */
   --nav-background-colour: var(--colour-lightdark);
   --nav-text-colour: var(--colour-white);
@@ -31,7 +22,6 @@
   /* search bar */
   --search-background-colour: var(--major-background-colour);
   --searchbar-background-colour: var(--colour-white);
-  --searchbar-background-colour-active: 227, 222, 255;
   --searchbar-text-colour: var(--colour-dark);
   --searchbar-text-colour-active: var(--colour-dark);
 
@@ -56,10 +46,7 @@
   --hover-box-shadow: 0px 0px 20px 1px rgba(0, 0, 0, 0.5);
   --nav-boxshadow: 0px 0px 15px 3px rgba(var(--colour-black), 0.8);
   
-  /* --margin-separator-top: 2.5rem; */
-  --margin-separator-top: 4vh;
-
-  /* font-size: normal; */
+  --margin-separator: 7vh;
 }
 
 html,
@@ -68,7 +55,6 @@ body {
   margin: 0;
   overflow-x: hidden;
   font-family: 'Open Sans', sans-serif;
-  /* font-size: medium; */
   background-color: rgb(var(--major-background-colour));
 }
 

@@ -27,8 +27,20 @@ const AboutModal = () => {
         <motion.div className={styles.backdrop} onClick={(e) => modalContext.modalClose()} {...animationModal}>
             <motion.div onClick={(e) => e.stopPropagation()} className={styles.modal} {...animationContent}>
                 <h1>Is It Down?</h1>
-                <p>Checks if something is down for everyone or just you. <br/>
-                Enter a host (eg: confluence.csiro.au) and press enter.</p>
+                <p>
+                    Checks if a resource is down for everyone or just you.
+                </p>
+                <p>
+                    Enter a host (eg: confluence.csiro.au) and press enter. <br />
+                    Use the dropdown to change protocols.
+                </p>
+                <p>
+                    Note: The server will attempt to DNS resolve your input <br />
+                    on following domians: [csiro.au, it.csiro.au, nexus.csiro.au] <br />
+                    so there's no need to enter the FQDN for a workstation, such as <br />
+                    'samsara-nc.nexus.csiro.au'. You only need to enter 'samsara-nc'
+                </p>
+
                 <p>Suggestions, bugs or comments go to <a href="mailto:george.edwards@csiro.au">edw19b@csiro.au</a></p>
                 <p>Built using React with Next.js<br/>
                 -George <a href="tel:0419866631">0419866631</a></p>

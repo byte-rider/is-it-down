@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import {serverLogFile} from '../../config/ApiServerAddress';
+import {serverLogFile, dev} from '../../config/ApiServerAddress';
 
 const http = require('http');
 const https = require('https');
@@ -9,34 +9,35 @@ const { exec } = require("child_process");
 
 const fs = require('fs'); // file system : used for writing to the log
 
-
-console.log(serverLogFile);
-
-
 const performHTTPLookup = (httpModule, url) => {
     const TIMEOUT = 7000;
     return new Promise(resolve => {
         const handleSuccess = (v) => {
-            const i = v.rawHeaders.indexOf('Location') + 1; // Yuck. What were you thinking, Geogie boy? Change this hack to check for 301 status /then/ report the new location.
-            let newLocation = (i)? v.rawHeaders[i] : "";
-            resolve({
-                hostIsUp: true, 
-                extraInfo: {
-                    protocol : v.socket._httpMessage.protocol,
-                    host: v.socket._httpMessage.host,
-                    path : v.socket._httpMessage.path,
-                    httpStatusCode: v.statusCode,
-                    httpStatusMessage: v.statusMessage,
-                    newLocation: newLocation,
-                    httpHeader: v.socket._httpMessage._header,
-                    defaultEncoding: v._readableState.defaultEncoding,
-                    rawHeaders: v.rawHeaders,
-                }});
+            let returnObject = { hostIsUp: true } 
+            let extraInfoObject = {
+                protocol : v.socket._httpMessage.protocol,
+                host: v.socket._httpMessage.host,
+                path : v.socket._httpMessage.path,
+                httpStatusCode: v.statusCode,
+                httpMessage: v.statusMessage,
+                httpHeader: v.socket._httpMessage._header,
+                defaultEncoding: v._readableState.defaultEncoding,
+                rawHeaders: v.rawHeaders,
+            }
+
+            // mutates above object if a redirect was returned
+            if (v.statusCode === 301) {
+                const i = v.rawHeaders.indexOf('Location') + 1;
+                extraInfoObject.httpMessage = (i) ? `MOVED TO --> ${v.rawHeaders[i]}` : v.statusMessage;
+            }
+
+            // nests extra info inside the return object
+            returnObject.extraInfo = extraInfoObject;
+            resolve(returnObject);
         }
 
         const handleError = (e) => {
-            if (e.code === "ECONNRESET") {
-                // timeout was reached
+            if (e.code === "ECONNRESET") { // timeout was reached
                 e.socket = "socket hang up";
                 e.note = "timeout reached";
             }
@@ -90,16 +91,12 @@ const performPing = (host) => {
 
 const getFQDN = function(host) {
     return new Promise(resolve => {
+        if (dev) { resolve("dev environment") }
         exec(`nslookup ${host} | grep Name | head -n 1 | awk '{print $2}'`, (error, stdout, stderr) => {
-            if (error) {
-                resolve(error)
-            }
-            if (stderr) {
-                resolve(stderr);
-            }
+            if (error) { resolve("error") }
+            if (stderr) { resolve(stderr) }
             resolve(stdout);
         });
-
     })
 }
 

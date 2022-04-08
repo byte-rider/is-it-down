@@ -14,7 +14,6 @@
     /* children: flex */
     display: flex;
     flex-direction: column;
-
 }
 
 .container p {
@@ -26,7 +25,8 @@
     /* positioning */
     align-self: center;
     position: relative;
-    width: calc(100% - 2vw);
+    /* width: calc(100% - 2vw); */
+    width: 97%;
     top: -1rem;
     margin-top: 0px;
     margin-bottom: 0px;
@@ -63,9 +63,6 @@
     
     /* behaviour cursor */
     cursor: pointer;
-
-    /* behaviour text-overflow */
-    /* overflow: hidden; */
 
     /* children: flex */
     display: flex;

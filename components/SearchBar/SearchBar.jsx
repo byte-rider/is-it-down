@@ -87,7 +87,7 @@ const SearchBar = () => {
     return (
         <div className={styles.container}>
             <div className={styles.customSelect}>
-                <select ref={searchBarContext.inputProtocolReference} name="protocol" id="protocol-select" defaultValue="https" onChange={() => searchBarContext.inputHostReference.current.focus()}>
+                <select ref={searchBarContext.inputProtocolReference} name="protocol" id="protocol-select" defaultValue="ALL" onChange={() => searchBarContext.inputHostReference.current.focus()}>
                     <option value="ALL">ALL</option>
                     <option value="http">http://</option>
                     <option value="https">https://</option>
